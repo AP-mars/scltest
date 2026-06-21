@@ -36,7 +36,549 @@
         <div id="sitename">
             <img src="css\assets\SCLLogoText.png" height="78" width="163">
             <p id="version-node"></p>
+        </div><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily & Weekly Level Tab</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #1a2a6c);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 900px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(to right, #3498db, #8e44ad);
+            color: white;
+            padding: 25px 30px;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 2px solid #e9ecef;
+        }
+        
+        .tab-btn {
+            flex: 1;
+            padding: 20px 0;
+            background: transparent;
+            border: none;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #495057;
+            position: relative;
+        }
+        
+        .tab-btn.active {
+            color: #3498db;
+        }
+        
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: #3498db;
+        }
+        
+        .tab-btn:hover:not(.active) {
+            background: #e9ecef;
+        }
+        
+        .tab-content {
+            padding: 30px;
+            min-height: 400px;
+        }
+        
+        .tab-pane {
+            display: none;
+        }
+        
+        .tab-pane.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .level-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .level-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            width: 48%;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease;
+            text-align: center;
+        }
+        
+        .level-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .level-card h3 {
+            color: #3498db;
+            margin-bottom: 15px;
+        }
+        
+        .level-card i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            color: #8e44ad;
+        }
+        
+        .level-card p {
+            color: #6c757d;
+            line-height: 1.6;
+        }
+        
+        .progress-container {
+            margin-top: 20px;
+        }
+        
+        .progress-bar {
+            height: 12px;
+            background: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 5px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            border-radius: 10px;
+            transition: width 1s ease;
+        }
+        
+        .daily-list, .weekly-list {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+        
+        .list-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f1f3f5;
+        }
+        
+        .list-header h2 {
+            color: #3498db;
+        }
+        
+        .add-item {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .add-item:hover {
+            background: #2980b9;
+            transform: scale(1.05);
+        }
+        
+        .item-list {
+            list-style: none;
+        }
+        
+        .list-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #f1f3f5;
+            transition: all 0.3s ease;
+        }
+        
+        .list-item:hover {
+            background: #f8f9fa;
+        }
+        
+        .item-checkbox {
+            margin-right: 15px;
+            width: 22px;
+            height: 22px;
+            cursor: pointer;
+        }
+        
+        .item-text {
+            flex: 1;
+            font-size: 1.1rem;
+        }
+        
+        .item-text.completed {
+            text-decoration: line-through;
+            color: #6c757d;
+        }
+        
+        .item-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .action-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1rem;
+            color: #6c757d;
+            transition: all 0.3s ease;
+        }
+        
+        .action-btn:hover {
+            color: #3498db;
+            transform: scale(1.2);
+        }
+        
+        .stats-container {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            width: 45%;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .stat-card h3 {
+            color: #3498db;
+            margin-bottom: 10px;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #8e44ad;
+        }
+        
+        .stat-desc {
+            color: #6c757d;
+            margin-top: 5px;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: #f8f9fa;
+            color: #6c757d;
+            border-top: 1px solid #e9ecef;
+        }
+        
+        @media (max-width: 768px) {
+            .level-card {
+                width: 100%;
+                margin-bottom: 20px;
+            }
+            
+            .stat-card {
+                width: 100%;
+            }
+            
+            .tabs {
+                flex-direction: column;
+            }
+            
+            .tab-btn {
+                border-bottom: 1px solid #e9ecef;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-chart-line"></i> Level Progress Tracker</h1>
+            <p class="subtitle">Daily & Weekly Task Management</p>
+        </header>
+        
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="daily">Daily Level</button>
+            <button class="tab-btn" data-tab="weekly">Weekly Level</button>
         </div>
+        
+        <div class="tab-content">
+            <!-- Daily Tab -->
+            <div id="daily" class="tab-pane active">
+                <div class="level-container">
+                    <div class="level-card">
+                        <i class="fas fa-fire"></i>
+                        <h3>Daily Level</h3>
+                        <p>Complete your daily tasks to level up!</p>
+                        <div class="progress-container">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 65%; background: linear-gradient(to right, #e74c3c, #f39c12);"></div>
+                            </div>
+                            <p>65% Complete</p>
+                        </div>
+                    </div>
+                    
+                    <div class="level-card">
+                        <i class="fas fa-trophy"></i>
+                        <h3>Weekly Progress</h3>
+                        <p>Track your weekly achievements</p>
+                        <div class="progress-container">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 40%; background: linear-gradient(to right, #3498db, #2ecc71);"></div>
+                            </div>
+                            <p>40% Complete</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="daily-list">
+                    <div class="list-header">
+                        <h2><i class="fas fa-tasks"></i> Daily Tasks</h2>
+                        <button class="add-item"><i class="fas fa-plus"></i> Add Task</button>
+                    </div>
+                    
+                    <ul class="item-list">
+                        <li class="list-item">
+                            <input type="checkbox" class="item-checkbox">
+                            <span class="item-text">Complete morning routine</span>
+                            <div class="item-actions">
+                                <button class="action-btn"><i class="fas fa-edit"></i></button>
+                                <button class="action-btn"><i class="fas fa-trash-alt"></i></button>
+                            </div>
+                        </li>
+                        <li class="list-item">
+                            <input type="checkbox" class="item-checkbox" checked>
+                            <span class="item-text item-text completed">Review daily goals</span>
+                            <div class="item-actions">
+                                <button class="action-btn"><i class="fas fa-edit"></i></button>
+                                <button class="action-btn"><i class="fas fa-trash-alt"></i></button>
+                            </div>
+                        </li>
+                        <li class="list-item">
+                            <input type="checkbox" class="item-checkbox">
+                            <span class="item-text">Work on project tasks</span>
+                            <div class="item-actions">
+                                <button class="action-btn"><i class="fas fa-edit"></i></button>
+                                <button class="action-btn"><i class="fas fa-trash-alt"></i></button>
+                            </div>
+                        </li>
+                        <li class="list-item">
+                            <input type="checkbox" class="item-checkbox">
+                            <span class="item-text">Exercise for 30 minutes</span>
+                            <div class="item-actions">
+                                <button class="action-btn"><i class="fas fa-edit"></i></button>
+                                <button class="action-btn"><i class="fas fa-trash-alt"></i></button>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="stats-container">
+                    <div class="stat-card">
+                        <h3>Tasks Completed</h3>
+                        <div class="stat-value">12</div>
+                        <p class="stat-desc">Today's progress</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Streak Days</h3>
+                        <div class="stat-value">7</div>
+                        <p class="stat-desc">Consecutive days</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Weekly Tab -->
+            <div id="weekly" class="tab-pane">
+                <div class="level-container">
+                    <div class="level-card">
+                        <i class="fas fa-rocket"></i>
+                        <h3>Weekly Goal</h3>
+                        <p>Complete all weekly objectives</p>
+                        <div class="progress-container">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 35%; background: linear-gradient(to right, #9b59b6, #3498db);"></div>
+                            </div>
+                            <p>35% Complete</p>
+                        </div>
+                    </div>
+                    
+                    <div class="level-card">
+                        <i class="fas fa-medal"></i>
+                        <h3>Weekly Achievement</h3>
+                        <p>Level up your productivity</p>
+                        <div class="progress-container">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 75%; background: linear-gradient(to right, #2ecc71, #f1c40f);"></div>
+                            </div>
+                            <p>75% Complete</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="weekly-list">
+                    <div class="list-header">
+                        <h2><i class="fas fa-calendar-week"></i> Weekly Tasks</h2>
+                        <button class="add-item"><i class="fas fa-plus"></i> Add Task</button>
+                    </div>
+                    
+                    <ul class="item-list">
+                        <li class="list-item">
+                            <input type="checkbox" class="item-checkbox">
+                            <span class="item-text">Plan weekly goals</span>
+                            <div class="item-actions">
+                                <button class="action-btn"><i class="fas fa-edit"></i></button>
+                                <button class="action-btn"><i class="fas fa-trash-alt"></i></button>
+                            </div>
+                        </li>
+                        <li class="list-item">
+                            <input type="checkbox" class="item-checkbox" checked>
+                            <span class="item-text item-text completed">Review weekly progress</span>
+                            <div class="item-actions">
+                                <button class="action-btn"><i class="fas fa-edit"></i></button>
+                                <button class="action-btn"><i class="fas fa-trash-alt"></i></button>
+                            </div>
+                        </li>
+                        <li class="list-item">
+                            <input type="checkbox" class="item-checkbox">
+                            <span class="item-text">Complete project milestone</span>
+                            <div class="item-actions">
+                                <button class="action-btn"><i class="fas fa-edit"></i></button>
+                                <button class="action-btn"><i class="fas fa-trash-alt"></i></button>
+                            </div>
+                        </li>
+                        <li class="list-item">
+                            <input type="checkbox" class="item-checkbox">
+                            <span class="item-text">Weekly team meeting</span>
+                            <div class="item-actions">
+                                <button class="action-btn"><i class="fas fa-edit"></i></button>
+                                <button class="action-btn"><i class="fas fa-trash-alt"></i></button>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="stats-container">
+                    <div class="stat-card">
+                        <h3>Weekly Tasks</h3>
+                        <div class="stat-value">24</div>
+                        <p class="stat-desc">Total tasks this week</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Productivity Score</h3>
+                        <div class="stat-value">85%</div>
+                        <p class="stat-desc">Weekly average</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>Shitty List Template &copy; 2023 | Daily & Weekly Level Tracking</p>
+        </footer>
+    </div>
+
+    <script>
+        // Tab switching functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            const tabPanes = document.querySelectorAll('.tab-pane');
+            
+            tabBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // Remove active class from all buttons and panes
+                    tabBtns.forEach(b => b.classList.remove('active'));
+                    tabPanes.forEach(p => p.classList.remove('active'));
+                    
+                    // Add active class to clicked button
+                    btn.classList.add('active');
+                    
+                    // Show corresponding pane
+                    const tabId = btn.getAttribute('data-tab');
+                    document.getElementById(tabId).classList.add('active');
+                });
+            });
+            
+            // Checkbox functionality
+            const checkboxes = document.querySelectorAll('.item-checkbox');
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    const itemText = this.nextElementSibling;
+                    if (this.checked) {
+                        itemText.classList.add('item-text completed');
+                    } else {
+                        itemText.classList.remove('item-text completed');
+                    }
+                });
+            });
+            
+            // Add task functionality
+            const addButtons = document.querySelectorAll('.add-item');
+            addButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    alert('Add new task functionality would be implemented here!');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+
         <div id="header-links">
             <a id="FormHelp" target="_blank" href="https://forms.gle/2rH2rLiBnmhJbjGa9" role="button">
                 Submit Record
